@@ -1,0 +1,32 @@
+<launch>
+
+<arg name = "StartRec" default = "false" />
+
+<include 
+file = "$(find turtlebot_gazebo)/launch/turtlebot_world.launch">
+<arg name = "world_file" value =  "$(find ard_line_follower)/maps/circle.world"/>
+</include>
+
+<!-- Detection node -->
+<node pkg="ard_line_follower" name="detect" type="detect.py" cwd="node" output="screen">
+</node>
+
+<!-- Robot commands node -->
+<node pkg="ard_line_follower" name="control" type="control.py" cwd="node" output="screen">
+</node>
+
+<!-- Robot commands node -->
+<node pkg="ard_line_follower" name="curv_converter" type="curv_to_cmd_vel.py" cwd="node" output="screen">
+</node>
+
+<node
+pkg = "rosbag"
+type = "record"
+name = "rosbag_record_all"
+respawn = "true"
+output = "screen"
+args = "-a -O BagFile -x /camera/(.*) "
+if = "$(arg StartRec)"
+/>
+
+</launch>

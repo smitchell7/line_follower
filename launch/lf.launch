@@ -1,11 +1,17 @@
 <launch>
 
 <arg name = "StartRec" default = "false" />
+<arg name = "Simulate" default = "true" />
 
-<include 
-file = "$(find turtlebot_gazebo)/launch/turtlebot_world.launch">
-<arg name = "world_file" value =  "$(find ard_line_follower)/maps/circle.world"/>
-</include>
+<group unless = "$(arg Simulate)">
+  <include file = "$(find kobuki_node)/launch/minimal.launch" />
+</group>
+
+<group if = "$(arg Simulate)">
+  <include file = "$(find turtlebot_gazebo)/launch/turtlebot_world.launch">
+    <arg name = "world_file" value =  "$(find ard_line_follower)/maps/circle.world"/>
+  </include>
+</group>
 
 <!-- Detection node -->
 <node pkg="ard_line_follower" name="detect" type="detect.py" cwd="node" output="screen">

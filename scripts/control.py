@@ -25,17 +25,21 @@ class Control:
         turn_magnitude = 0.7
         go_straight = 0.0
 
+        # use line center to choose to turn left, right, or go straight.
 
-        if line_center > line_threshold:
-            # turn right if line is to the left
-            curv_command = -1 * turn_magnitude
+        curv_command = go_straight
 
-        elif line_center < -1 * line_threshold:
-            # turn left if the line is to the right
-            curv_command = turn_magnitude
+        # # TODO remove this.
+        # if line_center > line_threshold:
+        #     # turn right if line is to the left
+        #     curv_command = -1 * turn_magnitude
 
-        else:
-            curv_command = go_straight
+        # elif line_center < -1 * line_threshold:
+        #     # turn left if the line is to the right
+        #     curv_command = turn_magnitude
+
+        # else:
+        #     curv_command = go_straight
 
         self.curvature_pub.publish(curv_command)
         self.vel_pub.publish(vel_command)

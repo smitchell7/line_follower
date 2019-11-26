@@ -40,7 +40,7 @@ class Control:
 
 
 if __name__ == '__main__':
-    c = Control(pub_topic='/cmd_vel_mux/input/teleop')
+    c = Control(pub_topic='/cmd_vel')
     rospy.spin()
 
 

@@ -16,7 +16,7 @@ class Detector:
         self.img_pub = rospy.Publisher('detected_image', Image, queue_size=2)
         self.line_pub = rospy.Publisher('line_position', Float32, queue_size=2)
         rospy.init_node('detector', anonymous=True)
-        rospy.Subscriber('/camera/rgb/image_raw', Image, self.image_cb)
+        rospy.Subscriber('/camera/image_raw', Image, self.image_cb)
         self.bridge = CvBridge()
 
     def image_cb(self,msg):

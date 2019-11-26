@@ -3,27 +3,56 @@
 <arg name = "StartRec" default = "false" />
 <arg name = "Simulate" default = "true" />
 
-<group unless = "$(arg Simulate)">
-  <include file = "$(find kobuki_node)/launch/minimal.launch" />
-</group>
 
+
+<!-- Launch simulation -->
 <group if = "$(arg Simulate)">
   <include file = "$(find turtlebot_gazebo)/launch/turtlebot_world.launch">
     <arg name = "world_file" value =  "$(find ard_line_follower)/maps/circle.world"/>
+    <remap from="/camera/rgb/" to="/camera"/>
   </include>
+
+
+
+  <node pkg="ard_line_follower" name="curv_converter" type="curv_to_cmd_vel.py" cwd="node" output="screen">
+    <remap from="/cmd_vel" to="/cmd_vel_mux/input/teleop" />
+  </node>
+
+  <!-- Detection node -->
+  <node pkg="ard_line_follower" name="detect" type="detect.py" cwd="node" output="screen">
+    <remap from="/camera/image_raw" to="/camera/rgb/image_raw" />
+  </node>
 </group>
 
-<!-- Detection node -->
-<node pkg="ard_line_follower" name="detect" type="detect.py" cwd="node" output="screen">
-</node>
+
+<!-- Launch real turtlebot -->
+<group unless = "$(arg Simulate)">
+  <include file = "$(find kobuki_node)/launch/minimal.launch" />
+
+  <node name="camera" pkg="usb_cam" type="usb_cam_node" output="screen" >
+    <param name="video_device" value="/dev/video0" />
+    <param name="image_width" value="640" />
+    <param name="image_height" value="480" />
+    <param name="pixel_format" value="yuyv" />
+    <param name="camera_frame_id" value="/camera/rgb" />
+    <param name="io_method" value="mmap"/>
+  </node>
+
+  <node pkg="ard_line_follower" name="curv_converter" type="curv_to_cmd_vel.py" cwd="node" output="screen">
+    <remap from="/cmd_vel" to="/mobile_base/commands/velocity"/>
+  </node>
+
+  <!-- Detection node -->
+  <node pkg="ard_line_follower" name="detect" type="detect.py" cwd="node" output="screen">
+  </node>
+</group>
+
+
 
 <!-- Robot commands node -->
 <node pkg="ard_line_follower" name="control" type="control.py" cwd="node" output="screen">
 </node>
 
-<!-- Robot commands node -->
-<node pkg="ard_line_follower" name="curv_converter" type="curv_to_cmd_vel.py" cwd="node" output="screen">
-</node>
 
 <node
 pkg = "rosbag"

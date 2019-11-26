@@ -1,14 +1,11 @@
 #!/usr/bin/python
-import sys
-sys.path.append('/home/smitchell/catkin_ws/src/line_follower/src')
-
 import roslib
 import rospy
 from sensor_msgs.msg import Image
 from std_msgs.msg import Float32
 from cv_bridge import CvBridge
 
-from ard_line_follower import line_detector
+from line_follower import line_detector
 import cv2 as cv
 
 class Detector:

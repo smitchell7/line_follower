@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package format="2">
-  <name>ard_line_follower</name>
+  <name>line_follower</name>
   <version>0.1.0</version>
   <description>
   Line follower

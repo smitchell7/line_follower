@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8.3)
-project(ard_line_follower)
+project(line_follower)
 
 string(REPLACE "_" "-" APT_PACKAGE_NAME ${PROJECT_NAME})
 set(CPACK_PACKAGE_VERSION_MAJOR 0)
@@ -119,7 +119,7 @@ catkin_python_setup()
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
 #  INCLUDE_DIRS include
-LIBRARIES ard_line_follower
+LIBRARIES line_follower
 CATKIN_DEPENDS message_generation rospy sensor_msgs std_msgs
 #  DEPENDS system_lib
 )
@@ -137,7 +137,7 @@ include_directories(
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/ard_line_follower.cpp
+#   src/${PROJECT_NAME}/line_follower.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -148,7 +148,7 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-# add_executable(${PROJECT_NAME}_node src/ard_line_follower_node.cpp)
+# add_executable(${PROJECT_NAME}_node src/line_follower_node.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -209,7 +209,7 @@ install(DIRECTORY launch/ maps/
 #############
 
 ## Add gtest based cpp test target and link libraries
-# catkin_add_gtest(${PROJECT_NAME}-test test/test_ard_line_follower.cpp)
+# catkin_add_gtest(${PROJECT_NAME}-test test/test_line_follower.cpp)
 # if(TARGET ${PROJECT_NAME}-test)
 #   target_link_libraries(${PROJECT_NAME}-test ${PROJECT_NAME})
 # endif()

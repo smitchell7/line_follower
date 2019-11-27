@@ -1,0 +1,9 @@
+<launch>
+
+<node pkg="joy" name="joy" type="joy_node">
+    <param name="deadzone" value="0.01" />
+</node>
+
+<node pkg="line_follower" name="steering_wheel" type="manual_drive.py" cwd="node" output="screen" />
+
+</launch>

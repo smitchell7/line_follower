@@ -5,29 +5,7 @@ from std_msgs.msg import Float32
 
 
 class Control:
-    def __init__(self):
-        # Set up publishers and subscribers
-        self.curvature_pub = rospy.Publisher(
-            '/curvature_command', Float32, queue_size=2)
-        self.vel_pub = rospy.Publisher(
-            '/velocity_command', Float32, queue_size=2)
-        rospy.init_node('control', anonymous=True)
-
-        # Choose the method to control the vehicle
-        control_method = 'circle'
-        if control_method == 'circle':
-            self.circle_control()
-        elif control_method == 'fixed':
-            rospy.Subscriber('/line_position', Float32,
-                             self.fixed_number_control)
-        elif control_method == 'proportional':
-            rospy.Subscriber('/line_position', Float32,
-                             self.proporional_control)
-
-    def publish_msgs(self, vel_command, curv_command):
-        self.curvature_pub.publish(curv_command)
-        self.vel_pub.publish(vel_command)
-
+    ################## Start with circle_control #############################
     def circle_control(self):
         # Can we make the vehicle go faster or slower in a straight line?
         # Can we make the vehicle turn left or right?
@@ -40,6 +18,9 @@ class Control:
             rospy.sleep(0.1)
 
     def fixed_number_control(self, msg):
+        # To use this, change the value of control_method in the __init__
+        # function to fixed
+
         # Every time the line is measured, it sends a message with how far to
         # the side the detected line is. We can use that information to make
         # the robot react to the line.
@@ -70,6 +51,9 @@ class Control:
         self.publish_msgs(vel_command, curv_command)
 
     def proportional_control(self, msg):
+        # To use this, change the value of control_method in the __init__
+        # function to proportional
+
         # Turning by a fixed magnitude makes the control jittery.
         # We can do better.
 
@@ -86,6 +70,30 @@ class Control:
         curv_command = 0.0 * line_center
 
         self.publish_msgs(vel_command, curv_command)
+
+    def __init__(self):
+        # Set up publishers and subscribers
+        self.curvature_pub = rospy.Publisher(
+            '/curvature_command', Float32, queue_size=2)
+        self.vel_pub = rospy.Publisher(
+            '/velocity_command', Float32, queue_size=2)
+        rospy.init_node('control', anonymous=True)
+
+        # Choose the method to control the vehicle
+        control_method = 'circle'
+        if control_method == 'circle':
+            self.circle_control()
+        elif control_method == 'fixed':
+            rospy.Subscriber('/line_position', Float32,
+                             self.fixed_number_control)
+        elif control_method == 'proportional':
+            rospy.Subscriber('/line_position', Float32,
+                             self.proporional_control)
+
+    def publish_msgs(self, vel_command, curv_command):
+        self.curvature_pub.publish(curv_command)
+        self.vel_pub.publish(vel_command)
+
 
 
 if __name__ == '__main__':

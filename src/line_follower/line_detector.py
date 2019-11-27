@@ -54,6 +54,8 @@ def draw_lines(frame, lines):
     return img
 
 def do_threshold(frame):
+    frame = cv.medianBlur(frame, 9)
+    #frame = cv.GaussianBlur(frame, (11,11), 0)
     img = cv.adaptiveThreshold(frame, 255, cv.ADAPTIVE_THRESH_GAUSSIAN_C, cv.THRESH_BINARY, 11, 2)
     img = cv.bitwise_not(img)
     return img;

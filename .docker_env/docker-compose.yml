@@ -1,0 +1,124 @@
+version: '2'
+services:
+  master:
+    image: ros:kinetic-ros-core
+    container_name: master
+    command:
+      - roscore
+
+  launcher:
+    build: .
+    container_name: launcher
+    volumes:
+      - data:/catkin_ws/src
+    depends_on:
+      - master
+    environment:
+      - "ROS_HOSTNAME=talker"
+      - "ROS_MASTER_URI=http://master:11311"
+    command: /wait-for-it.sh master:11311 -- roslaunch line_follower lf.launch
+
+  listener:
+    build: .
+    container_name: listener
+    environment:
+      - "ROS_HOSTNAME=listener"
+      - "ROS_MASTER_URI=http://master:11311"
+    command: /wait-for-it.sh master:11311 -- rosrun roscpp_tutorials talker
+
+volumes:
+  data:
+    driver: local
+    driver_opts:
+      type: none
+      device: ../
+      o: bind
+  assets:
+
+
+version: '2.0'
+
+networks: 
+  rosnet:
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.18.0.0/16
+
+services:
+  ros-master:
+    image: forklift_simulation
+    container_name: ros-master
+    networks: 
+      rosnet:
+        ipv4_address: 172.18.0.2
+    command: /start_roscore.sh
+    environment:
+      #- "ROS_HOSTNAME=ros-master"
+      #- "ROS_MASTER_URI=http://ros-master:11311"
+      - "ROS_IP=172.18.0.2"
+      - "ROS_MASTER_URI=http://172.18.0.2:11311"
+
+  npm:
+    image: forklift_simulation
+    depends_on:
+      - copy_worlds
+      - copy_models
+      - gazebo
+    volumes:
+      - assets:/root/gzweb/http/client/assets
+    networks: 
+      rosnet:
+        ipv4_address: 172.18.0.3
+    command: /start_npm.sh
+    environment:
+      #- "ROS_HOSTNAME=gazebo"
+      #- "ROS_MASTER_URI=http://ros-master:11311"
+      - "ROS_IP=172.18.0.3"
+      - "ROS_MASTER_URI=http://172.18.0.2:11311"
+      - "GAZEBO_MASTER_URI=172.18.0.5:11345"
+
+  copy_models:
+    image: forklift_simulation
+    volumes:
+      - assets:/assets
+    command: bash -i -c "/root/gzweb/get_local_models.py /assets"
+
+  copy_worlds:
+    image: alpine
+    volumes:
+      - data:/data
+      - assets:/worlds
+    command: find /data/worlds -iname '*.world' -exec cp {} /worlds/ \;
+
+  # argument decides initial pose of forklift in simulation
+  gazebo:
+    image: forklift_simulation
+    depends_on:
+      - ros-master
+    volumes:
+      - assets:/root/gzweb/http/client/assets
+    networks: 
+      rosnet:
+        ipv4_address: 172.18.0.5
+    command: /start_gazebo.sh
+    environment:
+      #- "ROS_HOSTNAME=gazebo"
+      #- "ROS_MASTER_URI=http://ros-master:11311"
+      - "ROS_IP=172.18.0.5"
+      - "ROS_MASTER_URI=http://172.18.0.2:11311"
+      - "GAZEBO_MASTER_URI=172.18.0.5:11345"
+
+  genie:
+    image: forklift_simulation
+    depends_on:
+      - gazebo
+    networks:
+      rosnet:
+        ipv4_address: 172.18.0.4
+    command: /start_ros.sh
+    environment:
+      #- "ROS_HOSTNAME=genie"
+      #- "ROS_MASTER_URI=http://ros-master:11311"
+      - "ROS_IP=172.18.0.4"
+      - "ROS_MASTER_URI=http://172.18.0.2:11311"

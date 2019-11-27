@@ -7,8 +7,15 @@
 
 <!-- Launch simulation -->
 <group if = "$(arg Simulate)">
-  <include file = "$(find turtlebot_gazebo)/launch/turtlebot_world.launch">
-    <arg name = "world_file" value =  "$(find line_follower)/maps/circle.world"/>
+
+  <include file = "$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="use_sim_time" value="true"/>
+    <arg name="debug" value="false"/>
+    <arg name="gui" value="false"/>
+    <arg name="world_name" value="$(find line_follower)/maps/circle.world"/>
+  </include>
+
+  <include file = "$(find kobuki_gazebo)/launch/includes/robot.launch.xml">
     <remap from="/camera/rgb/" to="/camera"/>
   </include>
 

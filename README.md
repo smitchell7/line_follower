@@ -45,7 +45,7 @@ To kill the script, hit control-c.
 
 ## Controls ##
 
-Read the control.py script, following the prompts in the comments. 
+Read the control.py script, following the prompts in the comments.
 If completed, you should be able to do the following:
 
 1. Control the robot to drive in circles.

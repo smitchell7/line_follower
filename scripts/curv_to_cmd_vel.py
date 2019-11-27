@@ -4,6 +4,7 @@ import rospy
 from std_msgs.msg import Float32
 from geometry_msgs.msg import Twist
 
+
 class Control:
     def __init__(self, pub_topic='/cmd_vel'):
         self.cmd_vel = rospy.Publisher(pub_topic, Twist, queue_size=2)
@@ -22,8 +23,7 @@ class Control:
         else:
             self.ready = True
 
-
-    def curv_cb(self,msg):
+    def curv_cb(self, msg):
         self.curv = msg.data
         if self.ready:
             self.calc_ang_vel()
@@ -38,10 +38,6 @@ class Control:
         self.cmd_vel.publish(msg)
 
 
-
 if __name__ == '__main__':
     c = Control(pub_topic='/cmd_vel')
     rospy.spin()
-
-
-

@@ -22,6 +22,12 @@
   <node pkg="line_follower" name="detect" type="detect.py" cwd="node" output="screen">
     <remap from="/camera/image_raw" to="/camera/rgb/image_raw" />
   </node>
+
+
+  <!-- Robot commands node -->
+  <node pkg="line_follower" name="control" type="control.py" cwd="node" output="screen">
+  </node>
+
 </group>
 
 
@@ -30,7 +36,7 @@
   <include file = "$(find kobuki_node)/launch/minimal.launch" />
 
   <node name="camera" pkg="usb_cam" type="usb_cam_node" output="screen" >
-    <param name="video_device" value="/dev/video0" />
+    <param name="video_device" value="/dev/video1" />
     <param name="image_width" value="640" />
     <param name="image_height" value="480" />
     <param name="pixel_format" value="yuyv" />
@@ -49,9 +55,6 @@
 
 
 
-<!-- Robot commands node -->
-<node pkg="line_follower" name="control" type="control.py" cwd="node" output="screen">
-</node>
 
 
 <node

@@ -22,7 +22,7 @@
     <remap from="/camera/image_raw" to="/camera/rgb/image_raw" />
   </node>
 
-  <node pkg="rqt_image_view" name="image" type="image_view" />
+  <node pkg="rqt_image_view" name="image" type="rqt_image_view" >
     <param name="image" value="/camera/rgb/image_raw" />
   </node>
 </group>
@@ -49,14 +49,14 @@
   <node pkg="line_follower" name="detect" type="detect.py" cwd="node" output="screen">
   </node>
 
-  <node pkg="rqt_image_view" name="image" type="image_view" />
+  <node pkg="rqt_image_view" name="image" type="rqt_image_view" >
     <param name="image" value="/camera/image_raw" />
   </node>
 
 </group>
 
 
-  <node pkg="rqt_image_view" name="detected" type="image_view" />
+  <node pkg="rqt_image_view" name="detected" type="rqt_image_view" >
     <param name="image" value="/detected_image" />
   </node>
 

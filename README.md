@@ -48,6 +48,6 @@ To kill the script, hit control-c.
 Read the control.py script, following the prompts in the comments. 
 If completed, you should be able to do the following:
 
-1. Make the robot drive in a straight line.
-1. Make the robot drive in a large clockwise circle.
-1. Make the robot drive in a small counter-clockwise circle.
+1. Control the robot to drive in circles.
+1. Control the robot to follow a line.
+1. Control the robot to follow a line smoothly.
